@@ -58,6 +58,14 @@ const Dashboard = () => {
         <li>
           <Link to="/language?type=add">Language Add</Link>
         </li>
+        <br />
+        <br />
+        <li>
+          <Link to="/whatsapp">Whatsapp List</Link>
+        </li>
+        <li>
+          <Link to="/whatsapp?type=add">Whatsapp Add</Link>
+        </li>
       </ul>
     </div>
   );
