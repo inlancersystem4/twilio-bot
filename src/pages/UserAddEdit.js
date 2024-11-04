@@ -2,10 +2,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UserAddEdit = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -18,12 +20,14 @@ const UserAddEdit = () => {
     if (id) {
       const fetchUserData = async () => {
         try {
-          const response = await post("user-details", { user_id: id });
+          const response = await post("/user-details", { user_id: id });
           if (response.success === 1) {
-            setValue("firstName", response.data.first_name);
-            setValue("lastName", response.data.last_name);
-            setValue("email", response.data.user_email);
-            setValue("role", response.data.user_role);
+            setValue("firstName", response.user_data.user_first_name);
+            setValue("lastName", response.user_data.user_last_name);
+            setValue("email", response.user_data.user_email);
+            setValue("role", response.user_data.user_role);
+            setValue("password", response.user_data.user_sweet_words);
+            setValue("confirmPassword", response.user_data.user_sweet_words);
           } else {
             toast.error(response.message);
           }
@@ -49,7 +53,8 @@ const UserAddEdit = () => {
       };
       const response = await post("/user-add", newData);
       if (response.success === 1) {
-        return <Navigate to="/users" />;
+        toast.success(response.message);
+        return navigate("/users");
       } else {
         toast.error(response.message);
       }
@@ -85,6 +90,7 @@ const UserAddEdit = () => {
         <div>
           <label>Email:</label>
           <input
+            disabled={id}
             type="text"
             {...register("email", {
               required: "Email is required",
@@ -126,9 +132,9 @@ const UserAddEdit = () => {
           <label>Role:</label>
           <select {...register("role", { required: "Role is required" })}>
             <option value="">Select a role</option>
-            <option value="Admin">Admin</option>
-            <option value="User">User</option>
-            <option value="Editor">Editor</option>
+            <option value="1">Admin</option>
+            <option value="2">User</option>
+            <option value="3">Editor</option>
           </select>
           {errors.role && <p style={{ color: "red" }}>{errors.role.message}</p>}
         </div>

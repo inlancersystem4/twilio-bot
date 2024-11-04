@@ -1,20 +1,23 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const RouterHandler = ({ children }) => {
   const { isLogging } = useSelector((state) => state.user);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  if (!isLogging) {
-    return location.pathname === "/login" ? (
-      <div>{children}</div>
-    ) : (
-      <Navigate to="/login" />
-    );
-  }
+  React.useEffect(() => {
+    if (!isLogging) {
+      if (location.pathname !== "/login") {
+        navigate("/login");
+      }
+    } else if (location.pathname === "/login") {
+      navigate("/");
+    }
+  }, [isLogging, location.pathname, navigate]);
 
-  return location.pathname === "/login" ? <Navigate to="/" /> : <>{children}</>;
+  return <>{children}</>;
 };
 
 export default RouterHandler;

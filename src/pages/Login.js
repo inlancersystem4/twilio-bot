@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setLogging } from "../redux/actions/actions";
 
 const Login = () => {
@@ -13,6 +13,7 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
@@ -24,9 +25,11 @@ const Login = () => {
       };
       const response = await post("/login", newData);
       if (response.success === 1) {
+        toast.success(response.message);
         dispatch(setLogging(true));
         localStorage.setItem("token", response.data.user_token);
-        <Navigate to="/" />;
+        localStorage.setItem("userID", response.data.id);
+        await navigate("/");
       } else {
         toast.error(response.message);
       }
