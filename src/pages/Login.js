@@ -10,6 +10,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -27,6 +28,7 @@ const Login = () => {
       if (response.success === 1) {
         toast.success(response.message);
         dispatch(setLogging(true));
+        reset();
         localStorage.setItem("token", response.data.user_token);
         localStorage.setItem("userID", response.data.id);
         await navigate("/");

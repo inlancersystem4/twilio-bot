@@ -12,6 +12,7 @@ const UserAddEdit = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm();
@@ -54,6 +55,7 @@ const UserAddEdit = () => {
       const response = await post("/user-add", newData);
       if (response.success === 1) {
         toast.success(response.message);
+        reset();
         return navigate("/users");
       } else {
         toast.error(response.message);

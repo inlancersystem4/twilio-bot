@@ -13,6 +13,7 @@ const Contact = () => {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
   const [contactList, setContactList] = useState([]);
@@ -23,10 +24,14 @@ const Contact = () => {
   const type = queryParams.get("type");
 
   useEffect(() => {
-    if (type !== "add" && type !== "edit") {
+    if (type === "add" && id) {
+      navigate("/contacts");
+    } else if (type === "edit" && !id) {
+      navigate("/contacts");
+    } else if (!type && id) {
       navigate("/contacts");
     }
-  }, [type, navigate]);
+  }, [type, id, navigate]);
 
   const fetchContactList = useCallback(async () => {
     setLoading(true);
@@ -102,6 +107,7 @@ const Contact = () => {
       if (response.success === 1) {
         toast.success(response.message);
         fetchContactList();
+        reset();
         navigate("/contacts");
       } else {
         toast.error(response.message);
