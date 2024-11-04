@@ -50,6 +50,14 @@ const Dashboard = () => {
         <li>
           <Link to="/contacts?type=add">Contacts Add</Link>
         </li>
+        <br />
+        <br />
+        <li>
+          <Link to="/language">Language List</Link>
+        </li>
+        <li>
+          <Link to="/language?type=add">Language Add</Link>
+        </li>
       </ul>
     </div>
   );

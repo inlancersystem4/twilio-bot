@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import Login from "./pages/Login";
 import User from "./pages/User";
 import Contact from "./pages/Contact";
+import Language from "./pages/Language";
 import UserAddEdit from "./pages/UserAddEdit";
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users" element={<User />} />
+        <Route path="/language/:id?" element={<Language />} />
         <Route path="/user-add-edit/:id?" element={<UserAddEdit />} />
         <Route path="/contacts/:id?" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
