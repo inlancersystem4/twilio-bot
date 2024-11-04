@@ -42,6 +42,14 @@ const Dashboard = () => {
         <li>
           <Link to="/user-add-edit">User Add</Link>
         </li>
+        <br />
+        <br />
+        <li>
+          <Link to="/contacts">Contacts List</Link>
+        </li>
+        <li>
+          <Link to="/contacts?type=add">Contacts Add</Link>
+        </li>
       </ul>
     </div>
   );

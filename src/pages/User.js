@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Trash2, Pencil } from "lucide-react";
 import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const User = () => {
   const navigate = useNavigate();
@@ -57,6 +57,7 @@ const User = () => {
   return (
     <div>
       <h1>User List</h1>
+      <Link to="/user-add-edit">Add User</Link>
       {loading ? (
         <p>Loading..</p>
       ) : (
