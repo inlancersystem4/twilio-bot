@@ -1,8 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { setLogging, setPermission } from "../actions/actions"
+import { setLogging, setPermission } from "../actions/actions";
 
 const initialState = {
-  isLogging: false,
+  isLogging: localStorage.getItem("token"),
   permission: null,
 };
 

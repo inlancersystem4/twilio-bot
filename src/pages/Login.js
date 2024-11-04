@@ -1,6 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import { Navigate } from "react-router-dom";
+import { setLogging } from "../redux/actions/actions";
 
 const Login = () => {
   const {
@@ -9,11 +13,23 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const dispatch = useDispatch();
+
   const onSubmit = async (data) => {
     try {
-      const newData = { name: "New Item" };
+      const newData = {
+        user_email: data.email,
+        user_password: data.password,
+        user_type: "Admin",
+      };
       const response = await post("/login", newData);
-      console.log("Created:", response);
+      if (response.success === 1) {
+        dispatch(setLogging(true));
+        localStorage.setItem("token", response.data.user_token);
+        <Navigate to="/" />;
+      } else {
+        toast.error(response.message);
+      }
     } catch (e) {
       console.error("Error login", e);
     }
