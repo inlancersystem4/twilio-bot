@@ -1,0 +1,95 @@
+project structure
+
+node_module
+public
+src
+  assests
+        font
+  components
+        ui
+  pages
+    Dashboard
+    NotFound
+    Login
+  redux
+    actions
+    reducers
+   store.js
+  styles
+  utils
+  App.js
+  index.js
+  reportWebVitals.js
+
+
+  this is my app.js
+
+  import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+export default App;
+
+
+this is my index.js 
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import "./styles/global.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import store from "./redux/store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+);
+
+reportWebVitals();
+
+
+this code i need one provider which use is check my 
+
+
+  import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogging, setPermission } from "./redux/actions/actions";
+
+const ExampleComponent = () => {
+  const dispatch = useDispatch();
+  const { isLogging, permission } = useSelector((state) => state.user);
+
+  const handleLogin = () => {
+    dispatch(setLogging(true));
+    dispatch(setPermission("admin"));
+  };
+
+  return (
+    <div>
+      <h1>User Status</h1>
+      <p>Is Logging: {isLogging ? "Yes" : "No"}</p>
+      <p>Permission: {permission}</p>
+      <button onClick={handleLogin}>Log In</button>
+    </div>
+  );
+};
+
+export default ExampleComponent;
