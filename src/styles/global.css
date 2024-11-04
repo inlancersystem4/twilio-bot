@@ -14,3 +14,7 @@
   box-sizing: border-box;
   font-family: "satoshi";
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
