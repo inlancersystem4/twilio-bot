@@ -24,5 +24,30 @@
 }
 
 .layout-wrapper .sidebar {
-  @apply w-full h-full border-r dark:border-white max-w-52;
+  @apply w-full h-full border-r dark:border-white border-dark border-opacity-10 dark:border-opacity-10 max-w-52 flex flex-col items-start justify-between py-2 px-2.5;
+}
+
+.main-layout {
+  @apply flex flex-col h-full w-full;
+}
+
+.main-layout .header {
+  @apply border-b dark:border-white border-dark border-opacity-10 dark:border-opacity-10 py-1.5 px-3 w-full flex items-center justify-between;
+}
+
+.main-layout .header button {
+  @apply min-w-8 min-h-8 max-w-8 max-h-8 flex items-center justify-center hover:bg-white hover:bg-opacity-10 rounded-md;
+}
+
+.main-layout .header button svg {
+  @apply w-4 h-4;
+}
+
+.layout-wrapper .sidebar .active-link {
+  @apply bg-white bg-opacity-10 text-opacity-100;
+}
+
+.nav-link a,
+.nav-link button {
+  @apply w-full flex items-center gap-2 justify-between rounded-lg py-1.5 px-2 text-sm capitalize hover:bg-white hover:bg-opacity-10 text-white text-opacity-80;
 }
