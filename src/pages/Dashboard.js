@@ -33,40 +33,6 @@ const Dashboard = () => {
       <h1>Dashboard Page</h1>
       <br />
       <button onClick={logOut}>Logout</button>
-      <br />
-      <br />
-      <ul>
-        <li>
-          <Link to="/users">User List</Link>
-        </li>
-        <li>
-          <Link to="/user-add-edit">User Add</Link>
-        </li>
-        <br />
-        <br />
-        <li>
-          <Link to="/contacts">Contacts List</Link>
-        </li>
-        <li>
-          <Link to="/contacts?type=add">Contacts Add</Link>
-        </li>
-        <br />
-        <br />
-        <li>
-          <Link to="/language">Language List</Link>
-        </li>
-        <li>
-          <Link to="/language?type=add">Language Add</Link>
-        </li>
-        <br />
-        <br />
-        <li>
-          <Link to="/whatsapp">Whatsapp List</Link>
-        </li>
-        <li>
-          <Link to="/whatsapp?type=add">Whatsapp Add</Link>
-        </li>
-      </ul>
     </div>
   );
 };

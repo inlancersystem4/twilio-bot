@@ -9,20 +9,18 @@ const RouterHandler = ({ children }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (!isLogging) {
-      if (location.pathname !== "/login") {
-        navigate("/login");
-      }
-    } else if (location.pathname === "/login") {
+    if (!isLogging && location.pathname !== "/login") {
+      navigate("/login");
+    } else if (isLogging && location.pathname === "/login") {
       navigate("/");
     }
   }, [isLogging, location.pathname, navigate]);
 
-  return (
-    <>
-      <LayoutWrapper>{children}</LayoutWrapper>
-    </>
-  );
+  if (!isLogging) {
+    return <>{children}</>;
+  }
+
+  return <LayoutWrapper>{children}</LayoutWrapper>;
 };
 
 export default RouterHandler;

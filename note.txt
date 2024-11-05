@@ -97,3 +97,39 @@ export default ExampleComponent;
 
 
 https://www.figma.com/community/file/1168811417705255214/snow-dashboard-ui-kit
+
+
+const navLinks = [
+  {
+    title: "Dashboards",
+    links: [
+      {
+        id: "#1",
+        link_name: "Home",
+        link_path: "/",
+        active_paths: ["/"],
+        icon: House,
+      },
+      {
+        id: "#1",
+        link_name: "User",
+        link_path: "/users",
+        active_paths: ["/users", "/user-add-edit"],
+        icon: User,
+      },
+      {
+        id: "#2",
+        link_name: "User",
+        icon: PanelRightOpen,
+        sub_links: [
+          {
+            id: "#3",
+            link_name: "Settings",
+            active_paths: ["/setting"],
+            link_path: "/setting",
+          },
+        ],
+      },
+    ],
+  },
+];

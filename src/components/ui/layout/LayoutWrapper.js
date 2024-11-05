@@ -7,6 +7,11 @@ import {
   Search,
   LogOut,
   ChevronRight,
+  House,
+  User,
+  ContactRound,
+  Languages,
+  MessageCircle,
 } from "lucide-react";
 import {
   Button,
@@ -17,6 +22,11 @@ import {
 } from "@headlessui/react";
 import Avatar from "react-avatar";
 import { Link, useLocation } from "react-router-dom";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
 
 const navLinks = [
   {
@@ -24,23 +34,50 @@ const navLinks = [
     links: [
       {
         id: "#1",
-        link_name: "Default",
+        link_name: "Home",
         link_path: "/",
-        active_paths: ["/", "/home"],
-        icon: PanelRightOpen,
+        active_paths: ["/"],
+        icon: House,
       },
       {
         id: "#2",
-        link_name: "Features",
-        icon: PanelRightOpen,
+        link_name: "User",
+        icon: User,
         sub_links: [
           {
-            id: "#3",
-            link_name: "Settings",
-            active_paths: ["/setting"],
-            link_path: "/setting",
+            id: "#2_1",
+            link_name: "List",
+            active_paths: ["/users"],
+            link_path: "/users",
+          },
+          {
+            id: "#2_2",
+            link_name: "Add",
+            active_paths: ["/user-add-edit"],
+            link_path: "/user-add-edit",
           },
         ],
+      },
+      {
+        id: "#4",
+        link_name: "language",
+        link_path: "/language",
+        active_paths: ["/language"],
+        icon: Languages,
+      },
+      {
+        id: "#3",
+        link_name: "Contacts",
+        link_path: "/contacts",
+        active_paths: ["/contacts"],
+        icon: ContactRound,
+      },
+      {
+        id: "#5",
+        link_name: "whatsapp",
+        link_path: "/whatsapp",
+        active_paths: ["/whatsapp"],
+        icon: MessageCircle,
       },
     ],
   },
@@ -49,7 +86,10 @@ const navLinks = [
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
 
-  const isActive = (linkPaths) => linkPaths.includes(location.pathname);
+  const isActive = (linkPaths) => {
+    if (!Array.isArray(linkPaths)) return false;
+    return linkPaths.includes(location.pathname);
+  };
 
   return (
     <main className="layout-wrapper">
@@ -81,20 +121,30 @@ const LayoutWrapper = ({ children }) => {
                   <ul className="space-y-1 w-full nav-link">
                     {nav.links &&
                       nav.links.map((link) => {
+                        const isLinkActive = isActive(link.active_paths);
+                        const hasActiveSubLink = link.sub_links?.some(
+                          (sub_link) => isActive(sub_link.active_paths)
+                        );
+
                         return link.sub_links && link.sub_links.length > 0 ? (
-                          <li className="w-full" key={link.id}>
-                            <button className="w-full">
+                          <Disclosure
+                            as="li"
+                            className="w-full"
+                            defaultOpen={isLinkActive || hasActiveSubLink}
+                            key={link.id}
+                          >
+                            <DisclosureButton className="w-full group">
                               <div className="flex items-center gap-2.5">
                                 {link.icon && (
-                                  <link.icon className="w-5 h-5 text-white" />
+                                  <link.icon className="w-4 h-4 text-white" />
                                 )}
                                 <span>{link.link_name}</span>
                               </div>
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
-                            <ul className="space-y-1 w-full pl-10 mt-2">
+                              <ChevronRight className="w-4 h-4 group-data-[open]:rotate-90 transition-transform" />
+                            </DisclosureButton>
+                            <DisclosurePanel className="space-y-1 w-full pl-10 mt-1">
                               {link.sub_links.map((sub_link) => (
-                                <li className="w-full" key={sub_link.id}>
+                                <div className="w-full" key={sub_link.id}>
                                   <Link
                                     to={sub_link.link_path}
                                     className={`${
@@ -105,10 +155,10 @@ const LayoutWrapper = ({ children }) => {
                                   >
                                     {sub_link.link_name}
                                   </Link>
-                                </li>
+                                </div>
                               ))}
-                            </ul>
-                          </li>
+                            </DisclosurePanel>
+                          </Disclosure>
                         ) : (
                           <li className="w-full" key={link.id}>
                             <Link
@@ -119,7 +169,7 @@ const LayoutWrapper = ({ children }) => {
                             >
                               <div className="flex items-center gap-2.5">
                                 {link.icon && (
-                                  <link.icon className="w-5 h-5 text-white" />
+                                  <link.icon className="w-4 h-4 text-white" />
                                 )}
                                 <span>{link.link_name}</span>
                               </div>
