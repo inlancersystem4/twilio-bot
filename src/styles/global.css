@@ -18,3 +18,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.layout-wrapper {
+  @apply w-full h-dvh overflow-hidden bg-white dark:bg-dark text-dark dark:text-white flex items-stretch;
+}
+
+.layout-wrapper .sidebar {
+  @apply w-full h-full border-r dark:border-white max-w-52;
+}

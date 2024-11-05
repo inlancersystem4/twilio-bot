@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import RouterHandler from "./utils/RouterHandler";
+import RouterHandler from "./context/RouterHandler";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import { Toaster } from "sonner";
@@ -14,7 +14,7 @@ import UserAddEdit from "./pages/UserAddEdit";
 const App = () => {
   return (
     <RouterHandler>
-      <Toaster />
+      <Toaster richColors={true} />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
