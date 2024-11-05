@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { setLogging } from "../redux/actions/actions";
+import { Input } from "@headlessui/react";
 
 const Login = () => {
   const {
@@ -41,68 +42,83 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
-        <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-          Login
-        </h1>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="text"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
-                },
-              })}
-              className="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
+    <main className="h-dvh w-full">
+      <div className="flex min-h-full w-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label
+                for="email"
+                className="block text-sm/6 font-medium text-gray-900"
+              >
+                Email address
+              </label>
+              <div className="mt-2">
+                <Input
+                  id="email"
+                  name="email"
+                  type="text"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email format",
+                    },
+                  })}
+                  autocomplete="email"
+                  className="block w-full rounded-md border-0
+            py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+            placeholder:text-gray-400 focus:ring-2 px-2 focus:ring-inset
+            focus:ring-indigo-600 sm:text-sm/6"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-          <div className="mb-6">
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              {...register("password", { required: "Password is required" })}
-              className="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  for="password"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full p-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-400"
-          >
-            {isSubmitting ? "Loading..." : "Login"}
-          </button>
-        </form>
+            <div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                {isSubmitting ? "Loading..." : "Login"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 
