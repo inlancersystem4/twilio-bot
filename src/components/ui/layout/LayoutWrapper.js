@@ -30,6 +30,7 @@ import { useDispatch } from "react-redux";
 import { post } from "../../../utils/apiHelper";
 import { setLogging } from "../../../redux/actions/actions";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 
 const navLinks = [
   {
@@ -91,6 +92,10 @@ const LayoutWrapper = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const initialSidebarState =
+    JSON.parse(localStorage.getItem("sidebar")) ?? true;
+  const [sidebar, setSidebar] = useState(initialSidebarState);
+
   const isActive = (linkPaths) => {
     if (!Array.isArray(linkPaths)) return false;
     return linkPaths.includes(location.pathname);
@@ -114,107 +119,119 @@ const LayoutWrapper = ({ children }) => {
     }
   };
 
+  function toggleSidebar() {
+    setSidebar((prevSidebar) => !prevSidebar);
+  }
+
+  useEffect(() => {
+    localStorage.setItem("sidebar", JSON.stringify(sidebar));
+  }, [sidebar]);
+
   return (
     <main className="layout-wrapper">
-      <aside className="sidebar">
-        <div className="space-y-8 w-full">
-          <Menu>
-            <MenuButton className="flex items-center gap-3 text-sm">
-              <Avatar name="Jeet Kasundra" size="28" round={true} />
-              Jeet Kasundra
-            </MenuButton>
-            <MenuItems
-              anchor="bottom start"
-              className="w-52 origin-top-right rounded-md border backdrop-blur-md border-white/5 bg-white/5 py-1 text-sm/6 mt-1.5 text-white transition duration-100 ease-out"
-            >
-              <MenuItem>
-                <Button
-                  onClick={logOut}
-                  className="flex items-center px-4 py-1.5 text-sm hover:bg-dark text-red-600 w-full"
-                >
-                  <LogOut className="w-4 h-4 mr-3" />
-                  Log Out
-                </Button>
-              </MenuItem>
-            </MenuItems>
-          </Menu>
-          <div className="w-full space-y-4">
-            {navLinks &&
-              navLinks.length > 0 &&
-              navLinks.map((nav) => (
-                <div className="space-y-2 w-full" key={nav.id}>
-                  <p className="text-sm opacity-40">{nav.title}</p>
-                  <ul className="space-y-1 w-full nav-link">
-                    {nav.links &&
-                      nav.links.map((link) => {
-                        const isLinkActive = isActive(link.active_paths);
-                        const hasActiveSubLink = link.sub_links?.some(
-                          (sub_link) => isActive(sub_link.active_paths)
-                        );
+      {sidebar && (
+        <aside className="sidebar">
+          <div className="space-y-8 w-full">
+            <Menu>
+              <MenuButton className="flex items-center gap-3 text-sm">
+                <Avatar name="Jeet Kasundra" size="28" round={true} />
+                Jeet Kasundra
+              </MenuButton>
+              <MenuItems
+                anchor="bottom start"
+                className="w-52 origin-top-right rounded-md border backdrop-blur-md border-white/5 bg-white/5 py-1 text-sm/6 mt-1.5 text-white transition duration-100 ease-out"
+              >
+                <MenuItem>
+                  <Button
+                    onClick={logOut}
+                    className="flex items-center px-4 py-1.5 text-sm hover:bg-dark text-red-600 w-full"
+                  >
+                    <LogOut className="w-4 h-4 mr-3" />
+                    Log Out
+                  </Button>
+                </MenuItem>
+              </MenuItems>
+            </Menu>
+            <div className="w-full space-y-4">
+              {navLinks &&
+                navLinks.length > 0 &&
+                navLinks.map((nav) => (
+                  <div className="space-y-2 w-full" key={nav.id}>
+                    <p className="text-sm opacity-40">{nav.title}</p>
+                    <ul className="space-y-1 w-full nav-link">
+                      {nav.links &&
+                        nav.links.map((link) => {
+                          const isLinkActive = isActive(link.active_paths);
+                          const hasActiveSubLink = link.sub_links?.some(
+                            (sub_link) => isActive(sub_link.active_paths)
+                          );
 
-                        return link.sub_links && link.sub_links.length > 0 ? (
-                          <Disclosure
-                            as="li"
-                            className="w-full"
-                            defaultOpen={isLinkActive || hasActiveSubLink}
-                            key={link.id}
-                          >
-                            <DisclosureButton className="w-full group">
-                              <div className="flex items-center gap-2.5">
-                                {link.icon && (
-                                  <link.icon className="w-4 h-4 text-white" />
-                                )}
-                                <span>{link.link_name}</span>
-                              </div>
-                              <ChevronRight className="w-4 h-4 group-data-[open]:rotate-90 transition-transform" />
-                            </DisclosureButton>
-                            <DisclosurePanel className="space-y-1 w-full pl-10 mt-1">
-                              {link.sub_links.map((sub_link) => (
-                                <div className="w-full" key={sub_link.id}>
-                                  <Link
-                                    to={sub_link.link_path}
-                                    className={`${
-                                      isActive(sub_link.active_paths)
-                                        ? "active-link"
-                                        : ""
-                                    }`}
-                                  >
-                                    {sub_link.link_name}
-                                  </Link>
-                                </div>
-                              ))}
-                            </DisclosurePanel>
-                          </Disclosure>
-                        ) : (
-                          <li className="w-full" key={link.id}>
-                            <Link
-                              to={link.link_path}
-                              className={`${
-                                isActive(link.active_paths) ? "active-link" : ""
-                              }`}
+                          return link.sub_links && link.sub_links.length > 0 ? (
+                            <Disclosure
+                              as="li"
+                              className="w-full"
+                              defaultOpen={isLinkActive || hasActiveSubLink}
+                              key={link.id}
                             >
-                              <div className="flex items-center gap-2.5">
-                                {link.icon && (
-                                  <link.icon className="w-4 h-4 text-white" />
-                                )}
-                                <span>{link.link_name}</span>
-                              </div>
-                            </Link>
-                          </li>
-                        );
-                      })}
-                  </ul>
-                </div>
-              ))}
+                              <DisclosureButton className="w-full group">
+                                <div className="flex items-center gap-2.5">
+                                  {link.icon && (
+                                    <link.icon className="w-4 h-4 text-white" />
+                                  )}
+                                  <span>{link.link_name}</span>
+                                </div>
+                                <ChevronRight className="w-4 h-4 group-data-[open]:rotate-90 transition-transform" />
+                              </DisclosureButton>
+                              <DisclosurePanel className="space-y-1 w-full pl-10 mt-1">
+                                {link.sub_links.map((sub_link) => (
+                                  <div className="w-full" key={sub_link.id}>
+                                    <Link
+                                      to={sub_link.link_path}
+                                      className={`${
+                                        isActive(sub_link.active_paths)
+                                          ? "active-link"
+                                          : ""
+                                      }`}
+                                    >
+                                      {sub_link.link_name}
+                                    </Link>
+                                  </div>
+                                ))}
+                              </DisclosurePanel>
+                            </Disclosure>
+                          ) : (
+                            <li className="w-full" key={link.id}>
+                              <Link
+                                to={link.link_path}
+                                className={`${
+                                  isActive(link.active_paths)
+                                    ? "active-link"
+                                    : ""
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5">
+                                  {link.icon && (
+                                    <link.icon className="w-4 h-4 text-white" />
+                                  )}
+                                  <span>{link.link_name}</span>
+                                </div>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                    </ul>
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
-        <p className="font-mono lowercase text-center w-full">TWILIO</p>
-      </aside>
+          <p className="font-mono lowercase text-center w-full">TWILIO</p>
+        </aside>
+      )}
       <section className="main-layout">
         <header className="header">
           <div className="flex items-center gap-2.5">
-            <Button>
-              <PanelRightOpen />
+            <Button onClick={toggleSidebar}>
+              <PanelRightOpen className={`${sidebar ? "" : "rotate-180"}`} />
             </Button>
           </div>
           <div className="flex items-center gap-2.5">
