@@ -13,6 +13,7 @@ import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
 import { useNavigate, useLocation, Link, useParams } from "react-router-dom";
 import { Button } from "@headlessui/react";
+import { AlertDialog } from "../components/custom/AlertDialog";
 
 const Whatsapp = () => {
   const navigate = useNavigate();
@@ -28,7 +29,9 @@ const Whatsapp = () => {
   const [whatsappList, setWhatsappList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [deleteId, setDeleteId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(true);
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get("type");
 
@@ -66,16 +69,32 @@ const Whatsapp = () => {
     fetchWhatsappList();
   }, [fetchWhatsappList]);
 
-  const handleDelete = async (id) => {
+  function toggleDelete(value) {
+    if (value) {
+      handleDelete();
+    } else {
+      setDeleteDialog(false);
+    }
+  }
+
+  function getDeleteId(id) {
+    setDeleteId(id);
+    setDeleteDialog(true);
+  }
+
+  const handleDelete = async () => {
     try {
-      const response = await post("/whats-app-remove", { wp_id: id });
+      const response = await post("/whats-app-remove", { wp_id: deleteId });
       if (response.success === 1) {
         toast.success(response.message);
         fetchWhatsappList();
+        setDeleteDialog(false);
       } else {
+        setDeleteDialog(false);
         toast.error(response.message);
       }
     } catch (e) {
+      setDeleteDialog(false);
       console.error("Error deleting contact", e);
     }
   };
@@ -189,7 +208,7 @@ const Whatsapp = () => {
                       <div>
                         <button
                           className="icon"
-                          onClick={() => handleDelete(item.wp_id)}
+                          onClick={() => getDeleteId(item.wp_id)}
                         >
                           <Trash2 />
                         </button>
@@ -198,7 +217,7 @@ const Whatsapp = () => {
                   </li>
                 ))
               ) : (
-                <li className="space-y-2 text-center">
+                <li className="space-y-2 text-center !py-6">
                   <Database className="w-12 h-12 mx-auto" />
                   <p>No Whatsapp found.</p>
                 </li>
@@ -264,6 +283,7 @@ const Whatsapp = () => {
           </button>
         </form>
       )}
+      <AlertDialog isOpen={deleteDialog} toggle={toggleDelete} />
     </div>
   );
 };

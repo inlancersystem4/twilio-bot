@@ -124,7 +124,7 @@ const User = () => {
                   </li>
                 ))
               ) : (
-                <li className="space-y-2 text-center">
+                <li className="space-y-2 text-center !py-6">
                   <Database className="w-12 h-12 mx-auto" />
                   <p>No Users found.</p>
                 </li>
