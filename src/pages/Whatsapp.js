@@ -1,5 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Trash2, Pencil, Plus, ListFilter, ArrowUpDown } from "lucide-react";
+import {
+  Trash2,
+  Pencil,
+  Plus,
+  ListFilter,
+  ArrowUpDown,
+  Loader,
+  Database,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
@@ -144,42 +152,68 @@ const Whatsapp = () => {
           </Button>
         </div>
       </div>
-      <div>
+      <div className="space-y-3">
         {loading ? (
-          <p>Loading..</p>
+          <div className="py-8 w-full text-center">
+            <Loader className="w-12 h-12 mx-auto animate-spin" />
+          </div>
         ) : (
           <>
-            <ul>
+            <ul className="custom-table">
+              <li className="flex items-center justify-between">
+                <div>
+                  <p>Whatsapp Number</p>
+                </div>
+                <div>
+                  <p>Action</p>
+                </div>
+              </li>
               {whatsappList.length > 0 ? (
                 whatsappList.map((item) => (
-                  <li key={item.wp_id}>
-                    <p>{item.wp_number}</p>
-                    <ul>
-                      <li>
-                        <button onClick={() => handleEdit(item.wp_id)}>
+                  <li
+                    className="flex items-center justify-between w-full"
+                    key={item.wp_id}
+                  >
+                    <div>
+                      <p>{item.wp_number}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <button
+                          className="icon"
+                          onClick={() => handleEdit(item.wp_id)}
+                        >
                           <Pencil />
                         </button>
-                      </li>
-                      <li>
-                        <button onClick={() => handleDelete(item.wp_id)}>
+                      </div>
+                      <div>
+                        <button
+                          className="icon"
+                          onClick={() => handleDelete(item.wp_id)}
+                        >
                           <Trash2 />
                         </button>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </li>
                 ))
               ) : (
-                <li>No Contacts found.</li>
+                <li className="space-y-2 text-center">
+                  <Database className="w-12 h-12 mx-auto" />
+                  <p>No Whatsapp found.</p>
+                </li>
               )}
             </ul>
-            <div>
+            <div className="flex items-center justify-end gap-2">
               <button
+                className="pagination-btn"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Previous
               </button>
               <button
+                className="pagination-btn"
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 disabled={currentPage >= totalPage}
               >

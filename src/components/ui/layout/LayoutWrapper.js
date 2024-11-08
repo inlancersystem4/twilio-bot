@@ -1,6 +1,5 @@
 import {
   PanelRightOpen,
-  Star,
   Sun,
   Moon,
   Bell,
@@ -217,9 +216,6 @@ const LayoutWrapper = ({ children }) => {
             <Button>
               <PanelRightOpen />
             </Button>
-            <Button>
-              <Star />
-            </Button>
           </div>
           <div className="flex items-center gap-2.5">
             <div className="bg-white bg-opacity-10 rounded-md py-1 pl-1 pr-1.5">
@@ -238,7 +234,7 @@ const LayoutWrapper = ({ children }) => {
             </Button>
           </div>
         </header>
-        <section className="px-3">{children}</section>
+        <section className="px-3 w-full h-full">{children}</section>
       </section>
     </main>
   );

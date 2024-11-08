@@ -1,9 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Trash2, Pencil } from "lucide-react";
+import {
+  Trash2,
+  Pencil,
+  Plus,
+  ListFilter,
+  ArrowUpDown,
+  Loader,
+  Database,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
 import { useNavigate, useLocation, Link, useParams } from "react-router-dom";
+import { Button } from "@headlessui/react";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -118,52 +127,99 @@ const Contact = () => {
   };
 
   return (
-    <div>
-      <h1>Contact List</h1>
-      <Link to="/contacts?type=add">Add Contact</Link>
-      {loading ? (
-        <p>Loading..</p>
-      ) : (
-        <>
-          <ul>
-            {contactList.length > 0 ? (
-              contactList.map(({ wp_contact_id, wp_contact_name }) => (
-                <li key={wp_contact_id}>
-                  <p>{wp_contact_name}</p>
-                  <ul>
-                    <li>
-                      <button onClick={() => handleEdit(wp_contact_id)}>
-                        <Pencil />
-                      </button>
-                    </li>
-                    <li>
-                      <button onClick={() => handleDelete(wp_contact_id)}>
-                        <Trash2 />
-                      </button>
-                    </li>
-                  </ul>
-                </li>
-              ))
-            ) : (
-              <li>No Contacts found.</li>
-            )}
-          </ul>
-          <div>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= totalPage}
-            >
-              Next
-            </button>
+    <div className="space-y-4 py-6">
+      <h1 className="text-base">Contact List</h1>
+      <div className="flex items-center justify-between gap-3 rounded-lg bg-white bg-opacity-10 py-1.5 px-2.5">
+        <div className="flex items-center gap-1">
+          <Link
+            className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center"
+            to="/contacts?type=add"
+          >
+            <Plus className="w-4 h-4" />
+          </Link>
+          <Button className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center">
+            <ListFilter className="w-4 h-4" />
+          </Button>
+          <Button className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center">
+            <ArrowUpDown className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+      <div className="space-y-3">
+        {loading ? (
+          <div className="py-8 w-full text-center">
+            <Loader className="w-12 h-12 mx-auto animate-spin" />
           </div>
-        </>
-      )}
+        ) : (
+          <>
+            <ul className="custom-table contacts-table">
+              <li className="flex items-center justify-between">
+                <div className="name">
+                  <p>Contact Name</p>
+                </div>
+                <div className="number">
+                  <p>Contact Number</p>
+                </div>
+                <div className="action">
+                  <p>Action</p>
+                </div>
+              </li>
+              {contactList.length > 0 ? (
+                contactList.map(
+                  ({ wp_contact_id, wp_contact_name, wp_contact_number }) => (
+                    <li
+                      className="flex items-center justify-between"
+                      key={wp_contact_id}
+                    >
+                      <p className="name">{wp_contact_name}</p>
+                      <p className="number">{wp_contact_number}</p>
+                      <div className="flex items-center justify-end gap-2 action">
+                        <div>
+                          <button
+                            className="icon"
+                            onClick={() => handleEdit(wp_contact_id)}
+                          >
+                            <Pencil />
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            className="icon"
+                            onClick={() => handleDelete(wp_contact_id)}
+                          >
+                            <Trash2 />
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                )
+              ) : (
+                <li className="space-y-2 text-center">
+                  <Database className="w-12 h-12 mx-auto" />
+                  <p>No Contacts found.</p>
+                </li>
+              )}
+            </ul>
+            <div className="flex items-center justify-end gap-2">
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                className="pagination-btn"
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage >= totalPage}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+      </div>
       {type && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
