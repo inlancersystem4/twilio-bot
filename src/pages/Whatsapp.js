@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil, Plus, ListFilter, ArrowUpDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { post } from "../utils/apiHelper";
 import { toast } from "sonner";
 import { useNavigate, useLocation, Link, useParams } from "react-router-dom";
+import { Button } from "@headlessui/react";
 
 const Whatsapp = () => {
   const navigate = useNavigate();
@@ -119,52 +120,75 @@ const Whatsapp = () => {
   };
 
   return (
-    <div>
-      <h1>Whatsapp List</h1>
-      <Link to="/whatsapp?type=add">Add Whatsapp</Link>
-      {loading ? (
-        <p>Loading..</p>
-      ) : (
-        <>
-          <ul>
-            {whatsappList.length > 0 ? (
-              whatsappList.map((item) => (
-                <li key={item.wp_id}>
-                  <p>{item.wp_number}</p>
-                  <ul>
-                    <li>
-                      <button onClick={() => handleEdit(item.wp_id)}>
-                        <Pencil />
-                      </button>
-                    </li>
-                    <li>
-                      <button onClick={() => handleDelete(item.wp_id)}>
-                        <Trash2 />
-                      </button>
-                    </li>
-                  </ul>
-                </li>
-              ))
-            ) : (
-              <li>No Contacts found.</li>
-            )}
-          </ul>
-          <div>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= totalPage}
-            >
-              Next
-            </button>
-          </div>
-        </>
-      )}
+    <div className="space-y-4 py-6">
+      <h1 className="text-base">Whatsapp List</h1>
+      <div className="flex items-center justify-between gap-3 rounded-lg bg-white bg-opacity-10 py-1.5 px-2.5">
+        <div className="flex items-center gap-1">
+          <Link
+            className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center"
+            to="/whatsapp?type=add"
+          >
+            <Plus className="w-4 h-4" />
+          </Link>
+          <Button
+            className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center"
+            to="/whatsapp?type=add"
+          >
+            <ListFilter className="w-4 h-4" />
+          </Button>
+          <Button
+            className="min-w-6 min-h-6 max-w-6 max-h-6 hover:bg-white hover:bg-opacity-20 rounded-md flex items-center justify-center"
+            to="/whatsapp?type=add"
+          >
+            <ArrowUpDown className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+      <div>
+        {loading ? (
+          <p>Loading..</p>
+        ) : (
+          <>
+            <ul>
+              {whatsappList.length > 0 ? (
+                whatsappList.map((item) => (
+                  <li key={item.wp_id}>
+                    <p>{item.wp_number}</p>
+                    <ul>
+                      <li>
+                        <button onClick={() => handleEdit(item.wp_id)}>
+                          <Pencil />
+                        </button>
+                      </li>
+                      <li>
+                        <button onClick={() => handleDelete(item.wp_id)}>
+                          <Trash2 />
+                        </button>
+                      </li>
+                    </ul>
+                  </li>
+                ))
+              ) : (
+                <li>No Contacts found.</li>
+              )}
+            </ul>
+            <div>
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage >= totalPage}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
+      </div>
       {type && (
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>

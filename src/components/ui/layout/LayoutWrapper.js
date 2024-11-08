@@ -21,12 +21,16 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import Avatar from "react-avatar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+import { useDispatch } from "react-redux";
+import { post } from "../../../utils/apiHelper";
+import { setLogging } from "../../../redux/actions/actions";
+import { toast } from "sonner";
 
 const navLinks = [
   {
@@ -85,10 +89,30 @@ const navLinks = [
 
 const LayoutWrapper = ({ children }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const isActive = (linkPaths) => {
     if (!Array.isArray(linkPaths)) return false;
     return linkPaths.includes(location.pathname);
+  };
+
+  const logOut = async () => {
+    try {
+      const response = await post("/logout", {
+        session_token: localStorage.getItem("token"),
+      });
+      if (response.success === 2) {
+        toast.success(response.message);
+        dispatch(setLogging(false));
+        localStorage.removeItem("token");
+        return navigate("/login");
+      } else {
+        toast.error(response.message);
+      }
+    } catch (e) {
+      console.error("Error logout", e);
+    }
   };
 
   return (
@@ -105,7 +129,10 @@ const LayoutWrapper = ({ children }) => {
               className="w-52 origin-top-right rounded-md border backdrop-blur-md border-white/5 bg-white/5 py-1 text-sm/6 mt-1.5 text-white transition duration-100 ease-out"
             >
               <MenuItem>
-                <Button className="flex items-center px-4 py-1.5 text-sm hover:bg-dark text-red-600 w-full">
+                <Button
+                  onClick={logOut}
+                  className="flex items-center px-4 py-1.5 text-sm hover:bg-dark text-red-600 w-full"
+                >
                   <LogOut className="w-4 h-4 mr-3" />
                   Log Out
                 </Button>
@@ -211,7 +238,7 @@ const LayoutWrapper = ({ children }) => {
             </Button>
           </div>
         </header>
-        <section>{children}</section>
+        <section className="px-3">{children}</section>
       </section>
     </main>
   );
